@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RRS
 {
-    class Graph
+    public class Graph
     {
         private static Graph _gInstance;
 
@@ -53,7 +53,7 @@ namespace RRS
         }
     }
 
-    class Vertex
+    public class Vertex
     {
         private List<Edge> _adjList = new List<Edge>();
 
@@ -68,10 +68,11 @@ namespace RRS
         }
     }
 
-    class Edge
+    public class Edge
     {
         private string to;
         private int capacity;
+        private int weight;
 
         public Edge(string to, int capa)
         {
@@ -93,5 +94,17 @@ namespace RRS
         {
             return to;
         }
+
+        public void EdgeUse()
+        {
+            weight--;
+        }
+
+        public void EdgeRecover()
+        {
+            weight++;
+        }
     }
+
+
 }
