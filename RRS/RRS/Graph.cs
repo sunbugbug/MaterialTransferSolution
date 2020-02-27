@@ -30,7 +30,7 @@ namespace RRS
                 
                 foreach (Edge e in v.getAdjList())
                 {
-                    Console.Write("{0} ", key);
+                    Console.Write("Start Vertex : {0}, ", key);
                     e.printEdge();
                 }
             }
@@ -72,17 +72,19 @@ namespace RRS
     {
         private string to;
         private int capacity;
+        private int usage = 0;
         private int weight;
 
         public Edge(string to, int capa)
         {
             this.to = to;
             this.capacity = capa;
+            this.weight = capa;
         }
 
         public void printEdge()
         {
-            Console.WriteLine("{0} {1}", to, capacity);
+            Console.WriteLine("toVertex : {0}, Capacity : {1}, Weight : {2}", to, capacity, weight);
         }
 
         public int getCapa()
@@ -97,12 +99,14 @@ namespace RRS
 
         public void EdgeUse()
         {
-            weight--;
+            usage++;
+            weight = capacity - usage;
         }
 
         public void EdgeRecover()
         {
-            weight++;
+            usage--;
+            weight = capacity - usage;
         }
     }
 

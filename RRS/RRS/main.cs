@@ -27,6 +27,9 @@ namespace RRS
 
             string[] vertices = sr.ReadLine().Split(' ');
 
+            Console.WriteLine("Graph 구성중..");
+            Console.WriteLine("");
+
             for (int i = 0; i < vertices.Length; i++)
             {
                 Vertex v = new Vertex();
@@ -45,6 +48,11 @@ namespace RRS
             }
 
             g.printGraph();
+
+            Console.WriteLine("");
+            Console.WriteLine("Graph 구성 완료!");
+            Console.WriteLine("-----------------------------");
+
             #endregion FILE로 Graph구성
             // DB 호출 -> _dicGraphInfo -> List<Edge>
 
@@ -60,10 +68,35 @@ namespace RRS
 
             queue.Enqueue(new Tuple<String, Route>("0", new Route("0")));
 
+            Console.WriteLine("BFS 시작");
+            Console.WriteLine("");
+
             BFS("7");
 
-            Console.WriteLine("MaxOfMin = {0}", MAXOFMIN);
+            Console.WriteLine("");
+            Console.WriteLine("MaxOfMin(최소유량 중 최대값) = {0}", MAXOFMIN);
+            Console.Write("가장 한가한 경로 : ");
             lastRoute.printRoute();
+
+            Console.WriteLine("");
+            Console.WriteLine("경로 사용..");
+            try
+            {
+                lastRoute.useRoute();
+            }
+            catch(RouteException re)
+            {
+                Console.WriteLine(re.Message);
+            }
+            finally
+            {
+                Console.WriteLine("경로 사용 완료!");
+                Console.WriteLine("----------------------");
+
+                Console.WriteLine("경로 설정된 후의 Graph");
+                Console.WriteLine("");
+                g.printGraph();
+            }
 
             #endregion
             return ;
