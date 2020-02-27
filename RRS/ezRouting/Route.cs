@@ -1,11 +1,12 @@
-﻿using System;
+﻿using ezRouting;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RRS
+namespace ezRouting
 {
     public class Route
     {
@@ -62,12 +63,12 @@ namespace RRS
             return minEdge;
         }
 
-        public void useRoute()
+        public void useRoute(Graph g)
         {
             for (int i = 0; i < _route.Count; i++)
             {
                 string vName = _route[i];
-                Vertex v = RRS.g.getVertex(vName);
+                Vertex v = g.getVertex(vName);
                 bool edgeUseFlag = false;
 
                 if (i < _route.Count - 1)

@@ -4,10 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ezRouting;
 
 namespace RRS
 {
-    class main
+    public class RRS
     {
         public static Graph g = Graph.GetInstance();
 
@@ -19,7 +20,7 @@ namespace RRS
 
         static void Main(string[] args)
         {
-            #region FILE로 Graph구성
+            #region FILE로 Graph구성 -> DB로 대체예정
             FileStream fs = new FileStream("input.txt", FileMode.Open, FileAccess.Read);
             StreamReader sr = new StreamReader(fs);
 
@@ -56,6 +57,10 @@ namespace RRS
             #endregion FILE로 Graph구성
             // DB 호출 -> _dicGraphInfo -> List<Edge>
 
+            #region Job 생성
+            JOB job = new JOB("0", "7", MATERIAL_TYPE.DEFAULT_MATERIAL);
+            #endregion
+
             #region BFS로 Routing
             { /* BFS하기 전에 초기화 */
                 queue.Clear();
@@ -63,26 +68,41 @@ namespace RRS
                 MAXOFMIN = (int)DEFAULT_NUM.MINNUM;
                 lastRoute = null;
             }
-
-            //Vertex v = g.getVertex("0");
-
-            queue.Enqueue(new Tuple<String, Route>("0", new Route("0")));
+            // Start Vertex를 queue에 집어넣는다.
+            queue.Enqueue(new Tuple<String, Route>(job.source, new Route(job.source)));
 
             Console.WriteLine("BFS 시작");
             Console.WriteLine("");
 
-            BFS("7");
+            BFS(job.terminal);
+            #endregion BFS로 Routing
 
+            #region Routing 결과
             Console.WriteLine("");
             Console.WriteLine("MaxOfMin(최소유량 중 최대값) = {0}", MAXOFMIN);
             Console.Write("가장 한가한 경로 : ");
             lastRoute.printRoute();
+            #endregion Routing 결과
 
+            #region 물류 객체 생성
+            Material newMaterial;
+            switch (job.MaterialType)
+            {
+                case MATERIAL_TYPE.DEFAULT_MATERIAL:
+                    newMaterial = new DefaultMaterial(lastRoute);
+                    break;
+                default:
+                    newMaterial = new DefaultMaterial(lastRoute);
+                    break;
+            }
+            #endregion 물류 객체 생성
+
+            #region Routing경로 사용
             Console.WriteLine("");
             Console.WriteLine("경로 사용..");
-            try
+            try 
             {
-                lastRoute.useRoute();
+                lastRoute.useRoute(g);
             }
             catch(RouteException re)
             {
@@ -98,7 +118,7 @@ namespace RRS
                 g.printGraph();
             }
 
-            #endregion
+            #endregion Routing경로 사용
             return ;
         }
 
@@ -123,7 +143,7 @@ namespace RRS
                     Route newRoute = new Route(route);
                     newRoute.AddRoute(e);
 
-                    Tuple<String, Route> nextTuple = new Tuple<String, Route>(e.getTo(), newRoute);
+                    Tuple<String, Route> nextTuple = new Tuple<String, Route>(e.to, newRoute);
                     queue.Enqueue(nextTuple);
                 }
             }
@@ -143,9 +163,28 @@ namespace RRS
         }
     }
 
-    enum DEFAULT_NUM
+    public class JOB
+    {
+        public string source { get; set; }
+        public string terminal { get; set; }
+        public MATERIAL_TYPE MaterialType { get; set; }
+        
+        public JOB(string s, string t, MATERIAL_TYPE mt)
+        {
+            source = s;
+            terminal = t;
+            MaterialType = mt;
+        }
+    }
+
+    public enum DEFAULT_NUM
     {
         MAXNUM = 9999,
         MINNUM = -1
+    }
+
+    public enum MATERIAL_TYPE
+    {
+        DEFAULT_MATERIAL = 0
     }
 }
