@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ezRouting
 {
-    public class Class1
+    public class EnumClass
     {
     }
         public enum DEFAULT_NUM

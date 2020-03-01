@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using ezRouting;
@@ -24,43 +26,59 @@ namespace RRS
             FileStream fs = new FileStream("input.txt", FileMode.Open, FileAccess.Read);
             StreamReader sr = new StreamReader(fs);
 
-            string edge;
-
-            string[] vertices = sr.ReadLine().Split(' ');
-
-            Console.WriteLine("Graph 구성중..");
-            Console.WriteLine("");
-
-            for (int i = 0; i < vertices.Length; i++)
-            {
-                Vertex v = new Vertex();
-                g.addVertex(v, i.ToString());
-            }
-
-            while((edge = sr.ReadLine()) != null){
-                string from, to;
-                int capa;
-
-                from = edge.Split(' ')[0].ToString();
-                to = edge.Split(' ')[1].ToString();
-                capa = Convert.ToInt32(edge.Split(' ')[2]);
-
-                g.addEdges(from, to, capa);
-            }
-
-            g.printGraph();
-
-            Console.WriteLine("");
-            Console.WriteLine("Graph 구성 완료!");
-            Console.WriteLine("-----------------------------");
+            makeGraph(sr);
 
             #endregion FILE로 Graph구성
             // DB 호출 -> _dicGraphInfo -> List<Edge>
 
             #region Job 생성
             JOB job = new JOB("0", "7", MATERIAL_TYPE.DEFAULT_MATERIAL);
+
+            //StopWatch로 측정한 Routing 속도
+            MeasureByStopWatch(job);
+
+            //TickCounter로 측정한 Routing 속도
+            MeasureByTickCounter(job);
+
             #endregion
 
+            
+            return ;
+        }
+
+        static public void MeasureByStopWatch(JOB job)
+        {
+          Stopwatch sw = new Stopwatch();
+            sw.Start();
+            CreateMaterial(job);
+            sw.Stop();
+            Console.WriteLine("1개의 JOB을 Routing 하는데 {0}초 소요되었습니다.", (double)((double)sw.ElapsedMilliseconds / 1000));
+        }
+
+        static public void MeasureByTickCounter(JOB job)
+        {
+            long endCnt;
+            long startCnt = 0;
+            long frequency;
+
+            QueryPerformanceCounter(out startCnt);
+            CreateMaterial(job);
+            QueryPerformanceFrequency(out frequency);
+            QueryPerformanceCounter(out endCnt);
+
+            double time = (endCnt - startCnt) / (double)frequency;
+
+            Console.WriteLine("1개의 JOB을 Routing 하는데 {0}초 소요되었습니다.", time);
+        }
+
+        [DllImport("kernel32.dll", CallingConvention = CallingConvention.Winapi)]
+        private static extern bool QueryPerformanceFrequency(out long frequency);
+
+        [DllImport("kernel32.dll", CallingConvention = CallingConvention.Winapi)]
+        private static extern bool QueryPerformanceCounter(out long counter);
+
+        public static void CreateMaterial(JOB job)
+        {
             #region BFS로 Routing
             { /* BFS하기 전에 초기화 */
                 queue.Clear();
@@ -100,11 +118,11 @@ namespace RRS
             #region Routing경로 사용
             Console.WriteLine("");
             Console.WriteLine("경로 사용..");
-            try 
+            try
             {
                 lastRoute.useRoute(g);
             }
-            catch(RouteException re)
+            catch (RouteException re)
             {
                 Console.WriteLine(re.Message);
             }
@@ -119,7 +137,40 @@ namespace RRS
             }
 
             #endregion Routing경로 사용
-            return ;
+        }
+        
+        public static void makeGraph(StreamReader sr)
+        {
+            string edge;
+
+            string[] vertices = sr.ReadLine().Split(' ');
+
+            Console.WriteLine("Graph 구성중..");
+            Console.WriteLine("");
+
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                Vertex v = new Vertex();
+                g.addVertex(v, i.ToString());
+            }
+
+            while ((edge = sr.ReadLine()) != null)
+            {
+                string from, to;
+                int capa;
+
+                from = edge.Split(' ')[0].ToString();
+                to = edge.Split(' ')[1].ToString();
+                capa = Convert.ToInt32(edge.Split(' ')[2]);
+
+                g.addEdges(from, to, capa);
+            }
+
+            g.printGraph();
+
+            Console.WriteLine("");
+            Console.WriteLine("Graph 구성 완료!");
+            Console.WriteLine("-----------------------------");
         }
 
         public static void BFS(string End)
@@ -177,14 +228,4 @@ namespace RRS
         }
     }
 
-    public enum DEFAULT_NUM
-    {
-        MAXNUM = 9999,
-        MINNUM = -1
-    }
-
-    public enum MATERIAL_TYPE
-    {
-        DEFAULT_MATERIAL = 0
-    }
 }

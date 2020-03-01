@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RRS", "RRS\RRS.csproj", "{D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ezRouting", "ezRouting\ezRouting.csproj", "{989DA27D-87B3-4CA9-BDF8-40BE87A562A6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CIM", "CIM\CIM.csproj", "{4965B8D2-3198-48D9-AD9D-230C90EAA5D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{989DA27D-87B3-4CA9-BDF8-40BE87A562A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{989DA27D-87B3-4CA9-BDF8-40BE87A562A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{989DA27D-87B3-4CA9-BDF8-40BE87A562A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4965B8D2-3198-48D9-AD9D-230C90EAA5D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4965B8D2-3198-48D9-AD9D-230C90EAA5D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4965B8D2-3198-48D9-AD9D-230C90EAA5D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4965B8D2-3198-48D9-AD9D-230C90EAA5D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
