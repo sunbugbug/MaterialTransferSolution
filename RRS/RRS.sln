@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ezRouting", "ezRouting\ezRo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CIM", "CIM\CIM.csproj", "{4965B8D2-3198-48D9-AD9D-230C90EAA5D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "1VSNChatServer", "1VSNChatServer\1VSNChatServer.csproj", "{89E1CC4F-E49F-4A48-A28C-C7F023E3B377}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "1VSNChatClient", "1VSNChatClient\1VSNChatClient.csproj", "{19325C4F-792E-4ED3-8B71-C3CF5889FFA3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{4965B8D2-3198-48D9-AD9D-230C90EAA5D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4965B8D2-3198-48D9-AD9D-230C90EAA5D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4965B8D2-3198-48D9-AD9D-230C90EAA5D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89E1CC4F-E49F-4A48-A28C-C7F023E3B377}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89E1CC4F-E49F-4A48-A28C-C7F023E3B377}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89E1CC4F-E49F-4A48-A28C-C7F023E3B377}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89E1CC4F-E49F-4A48-A28C-C7F023E3B377}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19325C4F-792E-4ED3-8B71-C3CF5889FFA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19325C4F-792E-4ED3-8B71-C3CF5889FFA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19325C4F-792E-4ED3-8B71-C3CF5889FFA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19325C4F-792E-4ED3-8B71-C3CF5889FFA3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

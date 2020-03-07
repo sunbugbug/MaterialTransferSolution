@@ -16,19 +16,19 @@ namespace ezRouting
         public Route(String vertex)
         {
             _route.Add(vertex);
-            minEdge = (int)DEFAULT_NUM.MAXNUM;
+            minEdge = EnumClass.MAXNUM;
         }
 
         public Route(Route route)
         {
-            this.minEdge = Math.Min(minEdge, route.getMinEdge());
+            this.minEdge = Math.Min(EnumClass.MAXNUM, route.getMinEdge());
             _route = route.copyRoute();
         }
 
 
         public void AddRoute(Edge e)
         {
-            minEdge = Math.Min(minEdge, e.capacity);
+            minEdge = Math.Min(minEdge, e.weight);
             _route.Add(e.to);
         }
 
