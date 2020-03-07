@@ -22,33 +22,33 @@ namespace RRS
 
         static void Main(string[] args)
         {
-            #region FILE로 Graph구성 -> DB로 대체예정
             FileStream fs = new FileStream("input.txt", FileMode.Open, FileAccess.Read);
             StreamReader sr = new StreamReader(fs);
 
-            makeGraph(sr);
+            //makeGraph(sr);
 
+            makeGraphByDB();
+
+            /* JOB 생성 확인을 위한 구문
             #endregion FILE로 Graph구성
             // DB 호출 -> _dicGraphInfo -> List<Edge>
 
             #region Job 생성
-            JOB job = new JOB("0", "7", MATERIAL_TYPE.DEFAULT_MATERIAL);
+            /OB job = new JOB("0", "7", MATERIAL_TYPE.DEFAULT_MATERIAL);
 
             //StopWatch로 측정한 Routing 속도
             MeasureByStopWatch(job);
 
             //TickCounter로 측정한 Routing 속도
             MeasureByTickCounter(job);
-
-            #endregion
-
+            */
             
             return ;
         }
 
         static public void MeasureByStopWatch(JOB job)
         {
-          Stopwatch sw = new Stopwatch();
+            Stopwatch sw = new Stopwatch();
             sw.Start();
             CreateMaterial(job);
             sw.Stop();
@@ -83,7 +83,7 @@ namespace RRS
             { /* BFS하기 전에 초기화 */
                 queue.Clear();
                 isFound = false;
-                MAXOFMIN = (int)DEFAULT_NUM.MINNUM;
+                MAXOFMIN = EnumClass.MINNUM;
                 lastRoute = null;
             }
             // Start Vertex를 queue에 집어넣는다.
@@ -138,7 +138,72 @@ namespace RRS
 
             #endregion Routing경로 사용
         }
-        
+
+        public static void makeGraphByDB()
+        {
+
+            Console.WriteLine("DB로 Graph 구성중...");
+            Console.WriteLine("");
+
+
+            using (StreamReader sr = new StreamReader(new FileStream("CIMTable.txt", FileMode.Open, FileAccess.Read)))
+            { // Vertex 만들기
+                string line = sr.ReadLine();
+                string[] args = line.Split(' ');
+
+                string CIMID;
+                string CIMName;
+
+                while ((line = sr.ReadLine()) != null)
+                {
+                    args = line.Split(' ');
+
+                    CIMID = args[0];
+                    CIMName = args[1];
+
+                    Vertex v = new Vertex(CIMName);
+                    g.addVertex(v, CIMID);
+                }
+            }
+
+            using (StreamReader sr = new StreamReader(new FileStream("CIMEdgeTable.txt", FileMode.Open, FileAccess.Read)))
+            { // Edge 생성(RRS용 Graph만 생성)
+                string edge;
+
+                string line = sr.ReadLine();
+                string[] args = line.Split(' ');
+
+                while ((edge = sr.ReadLine()) != null)
+                {
+                    args = edge.Split(' ');
+                    string CIM1 = args[0], 
+                        vCIM1 = args[1], 
+                        CIM2 = args[2], 
+                        vCIM2 = args[3], 
+                        capa = args[4], 
+                        doubleYN = args[5];
+
+                    if (!CIM1.Equals(CIM2))
+                    {
+                        if (doubleYN.Equals("N"))
+                        {
+                            // 나중에 구현
+                        }
+                        else
+                        {
+                            g.addEdges(CIM1, CIM2, Convert.ToInt32(capa));
+                        }
+                    }
+                }
+            }
+            g.printGraph();
+
+            Console.WriteLine("");
+            Console.WriteLine("Graph 구성 완료!");
+            Console.WriteLine("-----------------------------");
+        }
+
+
         public static void makeGraph(StreamReader sr)
         {
             string edge;
@@ -192,6 +257,9 @@ namespace RRS
                 {
                     //queue.Enqueue(g.getVertex(e.getTo()));
                     Route newRoute = new Route(route);
+
+                    if (e.weight <= 0) continue;
+                    
                     newRoute.AddRoute(e);
 
                     Tuple<String, Route> nextTuple = new Tuple<String, Route>(e.to, newRoute);

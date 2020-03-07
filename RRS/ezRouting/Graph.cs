@@ -58,6 +58,18 @@ namespace ezRouting
     {
         private List<Edge> _adjList = new List<Edge>();
 
+        public string vName { get; set; }
+
+        public Vertex()
+        {
+
+        }
+
+        public Vertex(string name)
+        {
+            this.vName = name;
+        }
+
         public List<Edge> getAdjList()
         {
             return _adjList;
